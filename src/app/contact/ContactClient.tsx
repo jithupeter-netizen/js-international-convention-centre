@@ -111,7 +111,7 @@ export default function ContactClient() {
     window.open(url, '_blank');
   };
 
-  // Form submit handler with Web3Forms & WhatsApp fallback
+  // Form submit handler with Cloudflare Worker & Web3Forms fallback
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateCaptcha()) return;
@@ -119,26 +119,43 @@ export default function ContactClient() {
     setIsSubmitting(true);
     
     try {
-      const apiKey = process.env.NEXT_PUBLIC_WEB3FORMS_KEY;
-      if (apiKey) {
-        await fetch("https://api.web3forms.com/submit", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-          body: JSON.stringify({
-            access_key: apiKey,
-            name: formData.name,
-            email: formData.email,
-            phone: formData.phone,
-            date: formData.date,
-            guests: formData.guests,
-            event_type: formData.eventType,
-            message: formData.message,
-            subject: `New Event Inquiry from ${formData.name} - J's International`,
-          }),
-        });
+      const endpoint = process.env.NEXT_PUBLIC_CONTACT_API_URL || "https://js-contact-worker.jithupeter.workers.dev";
+      
+      const res = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          date: formData.date,
+          guests: formData.guests,
+          eventType: formData.eventType,
+          message: formData.message,
+        }),
+      });
+
+      if (!res.ok) {
+        const web3Key = process.env.NEXT_PUBLIC_WEB3FORMS_KEY;
+        if (web3Key) {
+          await fetch("https://api.web3forms.com/submit", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              access_key: web3Key,
+              name: formData.name,
+              email: formData.email,
+              phone: formData.phone,
+              date: formData.date,
+              guests: formData.guests,
+              event_type: formData.eventType,
+              message: formData.message,
+            })
+          });
+        }
       }
       
       setIsSuccess(true);
