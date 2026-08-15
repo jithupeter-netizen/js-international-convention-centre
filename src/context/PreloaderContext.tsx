@@ -34,6 +34,8 @@ export const PreloaderProvider = ({ children }: { children: React.ReactNode }) =
     
     if (botPatterns.test(userAgent)) {
       setIsBot(true);
+      setProgress(100);
+      setIsFullyLoaded(true);
       return;
     }
 

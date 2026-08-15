@@ -26,28 +26,20 @@ export default function SmoothScroll({ children }: { children: ReactNode }) {
     });
 
     // Synchronize Lenis scrolling with GSAP ScrollTrigger
-    lenis.on("scroll", ScrollTrigger.update);
-
-    gsap.ticker.add((time) => {
+    const updateRaf = (time: number) => {
       lenis.raf(time * 1000);
-    });
+    };
 
-    gsap.ticker.lagSmoothing(0);
+    lenis.on("scroll", ScrollTrigger.update);
+    gsap.ticker.add(updateRaf);
 
-    // Refresh ScrollTrigger when the page height changes (e.g. images load, accordions open)
-    const resizeObserver = new ResizeObserver(() => {
-      ScrollTrigger.refresh();
-    });
-    resizeObserver.observe(document.body);
-    
-    // Fallback refresh after initial render
-    setTimeout(() => ScrollTrigger.refresh(), 500);
-    setTimeout(() => ScrollTrigger.refresh(), 1500);
+    // Initial ScrollTrigger refresh after layout stabilizes
+    const timer = setTimeout(() => ScrollTrigger.refresh(), 1000);
 
     return () => {
-      resizeObserver.disconnect();
+      clearTimeout(timer);
       lenis.destroy();
-      gsap.ticker.remove(lenis.raf);
+      gsap.ticker.remove(updateRaf);
     };
   }, [isFullyLoaded, isBot]);
 
