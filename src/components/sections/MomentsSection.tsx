@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { usePreloader } from "@/context/PreloaderContext";
+import { useInView } from "@/hooks/useInView";
 import { Camera } from "lucide-react";
 
 const photos = [
@@ -19,11 +20,14 @@ const photos = [
 
 export default function MomentsSection() {
   const { isFullyLoaded, isBot } = usePreloader();
+  const { ref: viewRef, isInView } = useInView("300px");
   const sectionRef = useRef<HTMLDivElement>(null);
   const galleryRef = useRef<HTMLDivElement>(null);
 
+  const shouldLoad = isBot || isInView;
+
   useEffect(() => {
-    if (isBot || !isFullyLoaded) return;
+    if (isBot || !isFullyLoaded || !shouldLoad) return;
     
     gsap.registerPlugin(ScrollTrigger);
 
@@ -65,11 +69,11 @@ export default function MomentsSection() {
     }, sectionRef);
 
     return () => ctx.revert();
-  }, [isFullyLoaded, isBot]);
+  }, [isFullyLoaded, isBot, shouldLoad]);
 
   return (
     <section ref={sectionRef} className="py-24 bg-luxury-light text-luxury-dark relative border-t border-luxury-taupe overflow-hidden">
-      <div className="max-w-7xl mx-auto px-6 md:px-12">
+      <div ref={viewRef} className="max-w-7xl mx-auto px-6 md:px-12">
         
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-16 moments-header opacity-0 flex flex-col items-center">
@@ -89,15 +93,19 @@ export default function MomentsSection() {
           {photos.map((photo, index) => (
             <div 
               key={index} 
-              className={`moment-photo opacity-0 overflow-hidden rounded-2xl relative group shadow-lg border border-luxury-taupe ${photo.style}`}
+              className={`moment-photo opacity-0 overflow-hidden rounded-2xl relative group shadow-lg border border-luxury-taupe bg-luxury-taupe/10 ${photo.style}`}
             >
-              <img 
-                src={photo.src} 
-                alt={photo.alt}
-                loading="lazy"
-                decoding="async"
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-              />
+              {shouldLoad ? (
+                <img 
+                  src={photo.src} 
+                  alt={photo.alt}
+                  loading="lazy"
+                  decoding="async"
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                />
+              ) : (
+                <div className="w-full h-full bg-luxury-taupe/15 animate-pulse" />
+              )}
               <div className="absolute inset-0 bg-luxury-dark/0 group-hover:bg-luxury-dark/20 transition-colors duration-500" />
             </div>
           ))}
