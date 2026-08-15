@@ -286,7 +286,8 @@ export default function AboutClient() {
 
               <div className="border-t border-luxury-taupe pt-6">
                 <h4 className="text-2xl font-medium text-luxury-dark mb-1">Mr. Jayakrishnan</h4>
-                <p className="text-luxury-gold font-medium">Founder, J's International Convention Centre</p>
+                <p className="text-luxury-mauve text-sm md:text-base font-medium mb-1">(An alumnus of IIM)</p>
+                <p className="text-luxury-gold font-medium">Founder, J’s International Convention Centre</p>
               </div>
             </div>
           </div>
