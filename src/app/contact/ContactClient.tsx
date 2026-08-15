@@ -119,7 +119,7 @@ export default function ContactClient() {
     setIsSubmitting(true);
     
     try {
-      const endpoint = process.env.NEXT_PUBLIC_CONTACT_API_URL || "https://js-contact-worker.jithupeter.workers.dev";
+      const endpoint = process.env.NEXT_PUBLIC_CONTACT_API_URL || "https://young-lake-eb0c.jithupeter.workers.dev";
       
       const res = await fetch(endpoint, {
         method: "POST",
