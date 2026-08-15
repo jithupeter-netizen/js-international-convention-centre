@@ -139,7 +139,7 @@ export function SpacesClient() {
         <div className="flex flex-col lg:flex-row gap-16">
           {/* Main Hall Details */}
           <div className="lg:w-2/3">
-            <h2 className="text-3xl md:text-4xl font-medium mb-6 text-luxury-dark">A Spectacular Pillar-less Venue</h2>
+            <h2 className="text-3xl md:text-4xl font-medium mb-6 text-luxury-dark">A Spectacular Expansive View</h2>
             <p className="text-lg text-luxury-mauve leading-relaxed mb-10">
               Designed to host majestic weddings and massive conventions, the Grand Auditorium is our crown jewel. Featuring state-of-the-art acoustics, customizable lighting, and an expansive seating capacity that guarantees an unforgettable experience for every guest.
             </p>
