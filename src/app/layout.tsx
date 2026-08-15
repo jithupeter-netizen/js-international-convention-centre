@@ -29,6 +29,9 @@ const montserrat = Montserrat({
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://jsconvention.com'),
+  alternates: {
+    canonical: '/',
+  },
   title: "J's International Convention Centre | Kalluvathukkal, Kollam",
   description: "A destination where celebrations find their perfect setting. Blending contemporary architecture with the beauty of nature for weddings, conferences, and events.",
   icons: {
