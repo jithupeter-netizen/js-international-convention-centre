@@ -28,7 +28,7 @@ const montserrat = Montserrat({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://jsconvention.com'),
+  metadataBase: new URL('https://jsconventioncentre.in'),
   alternates: {
     canonical: '/',
   },
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "J's International Convention Centre",
     description: "A premier wedding venue and convention centre in Kollam, Kerala.",
-    url: 'https://jsconvention.com',
+    url: 'https://jsconventioncentre.in',
     siteName: "J's International Convention Centre",
     images: [
       {
@@ -74,7 +74,6 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
-        <meta name="robots" content="noindex, nofollow" />
         <link rel="preload" href="/pix/main.webp" as="image" />
         <link rel="preconnect" href="https://www.google.com" />
         <link rel="preconnect" href="https://www.youtube.com" />
@@ -85,7 +84,7 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "EventVenue",
               "name": "J's International Convention Centre",
-              "image": "https://jsconvention.com/pix/main.webp",
+              "image": "https://jsconventioncentre.in/pix/main.webp",
               "address": {
                 "@type": "PostalAddress",
                 "streetAddress": "Kalluvathukkal",
@@ -94,8 +93,8 @@ export default function RootLayout({
                 "postalCode": "691578",
                 "addressCountry": "IN"
               },
-              "telephone": "+911234567890",
-              "url": "https://jsconvention.com"
+              "telephone": "+919567765059",
+              "url": "https://jsconventioncentre.in"
             })
           }}
         />

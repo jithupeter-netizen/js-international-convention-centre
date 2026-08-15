@@ -3,7 +3,7 @@ import { MetadataRoute } from 'next';
 export const dynamic = 'force-static';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://jsconvention.com';
+  const baseUrl = 'https://jsconventioncentre.in';
 
   return [
     {

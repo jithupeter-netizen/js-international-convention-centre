@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://jsconvention.com/sitemap.xml
+Sitemap: https://jsconventioncentre.in/sitemap.xml
