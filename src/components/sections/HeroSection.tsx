@@ -192,7 +192,7 @@ export default function HeroSection() {
       animationFrameId = requestAnimationFrame(rotateViewer);
     };
 
-    if (mounted) {
+    if (mounted && isFullyLoaded && !isBot) {
       const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       if (!prefersReducedMotion) {
         animationFrameId = requestAnimationFrame(rotateViewer);
@@ -204,7 +204,7 @@ export default function HeroSection() {
         cancelAnimationFrame(animationFrameId);
       }
     };
-  }, [mounted]);
+  }, [mounted, isFullyLoaded, isBot]);
 
   return (
     <section

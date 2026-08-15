@@ -67,14 +67,19 @@ const SPACES_DATA = [
     subtitle: "Premium Accommodation",
     description: "Exquisitely designed suites providing unparalleled comfort and luxury for the hosts and VIP guests to relax and prepare for the grand event.",
     features: ["Plush king-size beds", "En-suite luxury bathrooms", "24/7 room service", "Climate control"],
-    images: ["/Images/room 01.webp", "/Images/room 02.webp", "/Images/room 03.webp"]
+    images: ["/Images/Luxury Suites 01.jpeg", "/Images/Luxury Suites 02.jpeg", "/Images/room 03.webp"]
   },
   {
     id: "modern-kitchen",
     title: "Modern Kitchen",
     subtitle: "Culinary Excellence",
     description: "An ultra-modern, fully equipped commercial kitchen maintaining the highest standards of hygiene and capacity to cater to massive gatherings.",
-    features: ["Industrial-grade equipment", "Separate veg/non-veg prep areas", "Massive cold storage", "High-capacity ventilation"],
+    features: [
+      "4,000 Sq. Ft. Spacious Kitchen",
+      "High Ventilation & Processed Water",
+      "Built for Large Gatherings",
+      "Seamless Cooking-to-Dining Coordination"
+    ],
     images: ["/Images/kitchen 01.webp", "/Images/kitchen 02.webp"]
   },
   {

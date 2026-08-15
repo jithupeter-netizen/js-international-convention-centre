@@ -270,9 +270,9 @@ export default function AboutClient() {
             {/* Founder Picture */}
             <div className="md:col-span-5 relative z-10 h-[400px] md:h-[500px] w-full rounded-2xl overflow-hidden shadow-2xl border-4 border-white">
               <img 
-                src="/Gallery/046-2-scaled.webp" 
+                src="/Images/Founder.jpeg" 
                 alt="Mr. Jayakrishnan - Founder" 
-                className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
+                className="w-full h-full object-cover object-top transition-all duration-700"
                 loading="lazy"
                 decoding="async"
               />

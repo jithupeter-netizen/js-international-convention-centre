@@ -12,19 +12,19 @@ import AudioWidget from '@/components/ui/AudioWidget';
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
+  display: "swap",
 });
 
 export const viewport = {
   width: 'device-width',
   initialScale: 1,
-  maximumScale: 5, // Allow zooming for accessibility
+  maximumScale: 5,
 };
-
-
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",
   subsets: ["latin"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {

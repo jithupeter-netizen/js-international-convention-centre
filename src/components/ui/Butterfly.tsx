@@ -7,7 +7,7 @@ import "./Butterfly.css";
 
 export default function Butterfly() {
   const pathname = usePathname();
-  const { isFullyLoaded, isBot } = usePreloader();
+  const { isFullyLoaded, isBot, stage3Butterfly } = usePreloader();
   const butterflyRef = useRef<HTMLDivElement>(null);
   const wingLeftRef = useRef<SVGSVGElement>(null);
   const wingRightRef = useRef<SVGSVGElement>(null);
@@ -20,7 +20,7 @@ export default function Butterfly() {
   if (prefersReducedMotion) return null;
 
   useEffect(() => {
-    if (isBot || !isFullyLoaded) return;
+    if (isBot || !isFullyLoaded || !stage3Butterfly) return;
     if (!butterflyRef.current || !wingLeftRef.current || !wingRightRef.current) return;
 
     const butterfly = butterflyRef.current;
@@ -254,9 +254,9 @@ export default function Butterfly() {
       if (idleTimer) clearTimeout(idleTimer);
       if (animationFrameId) cancelAnimationFrame(animationFrameId);
     };
-  }, [isFullyLoaded, isBot]);
+  }, [isFullyLoaded, isBot, stage3Butterfly]);
 
-  if (isBot || !isFullyLoaded) return null;
+  if (isBot || !isFullyLoaded || !stage3Butterfly) return null;
 
   return (
     <div id="magic-butterfly" ref={butterflyRef}>
