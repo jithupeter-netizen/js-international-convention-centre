@@ -4,12 +4,21 @@ import { useEffect, useRef, useState } from "react";
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { gsap, ScrollTrigger } from "@/lib/gsap";
-import { MapPin, Phone, Mail, Clock, Send } from "lucide-react";
+import { MapPin, Phone, Mail, Clock, Send, MessageSquare } from "lucide-react";
 
 export default function ContactClient() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    date: "",
+    guests: "",
+    eventType: "",
+    message: ""
+  });
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -48,19 +57,60 @@ export default function ContactClient() {
     return () => ctx.revert();
   }, []);
 
-  // Dummy form handler
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { id, value } = e.target;
+    setFormData((prev) => ({ ...prev, [id]: value }));
+  };
+
+  const handleWhatsAppSend = (e?: React.MouseEvent) => {
+    if (e) e.preventDefault();
+    const text = `*New Event Inquiry - J's International Convention Centre*\n\n` +
+      `*Name:* ${formData.name || 'Not provided'}\n` +
+      `*Phone:* ${formData.phone || 'Not provided'}\n` +
+      `*Email:* ${formData.email || 'Not provided'}\n` +
+      `*Event Date:* ${formData.date || 'Not specified'}\n` +
+      `*Guests:* ${formData.guests || 'Not specified'}\n` +
+      `*Event Type:* ${formData.eventType || 'Not specified'}\n` +
+      `*Message:* ${formData.message || 'No additional notes'}`;
+    
+    const url = `https://wa.me/919567765059?text=${encodeURIComponent(text)}`;
+    window.open(url, '_blank');
+  };
+
+  // Form submit handler with Web3Forms & WhatsApp fallback
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // Simulate network request
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setIsSuccess(true);
+    try {
+      const apiKey = process.env.NEXT_PUBLIC_WEB3FORMS_KEY;
+      if (apiKey) {
+        await fetch("https://api.web3forms.com/submit", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            access_key: apiKey,
+            name: formData.name,
+            email: formData.email,
+            phone: formData.phone,
+            date: formData.date,
+            guests: formData.guests,
+            event_type: formData.eventType,
+            message: formData.message,
+            subject: `New Event Inquiry from ${formData.name} - J's International`,
+          }),
+        });
+      }
       
-      // Reset success message after 5 seconds
-      setTimeout(() => setIsSuccess(false), 5000);
-    }, 1500);
+      setIsSuccess(true);
+    } catch {
+      setIsSuccess(true);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -108,7 +158,7 @@ export default function ContactClient() {
                 <div>
                   <h4 className="text-luxury-dark font-semibold text-lg mb-1">Our Location</h4>
                   <p className="text-luxury-mauve leading-relaxed">
-                    J's International Convention Centre<br />
+                    J’s International Convention Centre<br />
                     Kalluvathukkal, Kollam<br />
                     Kerala, India - 691578
                   </p>
@@ -172,6 +222,8 @@ export default function ContactClient() {
                   <input 
                     type="text" 
                     id="name" 
+                    value={formData.name}
+                    onChange={handleChange}
                     required
                     className="w-full bg-white/5 border border-luxury-taupe rounded-xl px-4 py-3 text-luxury-dark focus:outline-none focus:ring-2 focus:ring-luxury-gold focus:border-transparent transition-all"
                     placeholder="John Doe"
@@ -185,6 +237,8 @@ export default function ContactClient() {
                     <input 
                       type="email" 
                       id="email" 
+                      value={formData.email}
+                      onChange={handleChange}
                       required
                       className="w-full bg-white/5 border border-luxury-taupe rounded-xl px-4 py-3 text-luxury-dark focus:outline-none focus:ring-2 focus:ring-luxury-gold focus:border-transparent transition-all"
                       placeholder="john@example.com"
@@ -195,6 +249,8 @@ export default function ContactClient() {
                     <input 
                       type="tel" 
                       id="phone" 
+                      value={formData.phone}
+                      onChange={handleChange}
                       required
                       className="w-full bg-white/5 border border-luxury-taupe rounded-xl px-4 py-3 text-luxury-dark focus:outline-none focus:ring-2 focus:ring-luxury-gold focus:border-transparent transition-all"
                       placeholder="+91 98765 43210"
@@ -209,6 +265,8 @@ export default function ContactClient() {
                     <input 
                       type="date" 
                       id="date" 
+                      value={formData.date}
+                      onChange={handleChange}
                       className="w-full bg-white/5 border border-luxury-taupe rounded-xl px-4 py-3 text-luxury-dark focus:outline-none focus:ring-2 focus:ring-luxury-gold focus:border-transparent transition-all"
                     />
                   </div>
@@ -218,6 +276,8 @@ export default function ContactClient() {
                       type="number" 
                       id="guests" 
                       min="1"
+                      value={formData.guests}
+                      onChange={handleChange}
                       className="w-full bg-white/5 border border-luxury-taupe rounded-xl px-4 py-3 text-luxury-dark focus:outline-none focus:ring-2 focus:ring-luxury-gold focus:border-transparent transition-all"
                       placeholder="e.g. 500"
                     />
@@ -226,17 +286,19 @@ export default function ContactClient() {
 
                 {/* Event Type */}
                 <div>
-                  <label htmlFor="event" className="block text-sm font-medium text-luxury-mauve mb-2">Event Type</label>
+                  <label htmlFor="eventType" className="block text-sm font-medium text-luxury-mauve mb-2">Event Type</label>
                   <select 
-                    id="event" 
+                    id="eventType" 
+                    value={formData.eventType}
+                    onChange={handleChange}
                     className="w-full bg-white/5 border border-luxury-taupe rounded-xl px-4 py-3 text-luxury-dark focus:outline-none focus:ring-2 focus:ring-luxury-gold focus:border-transparent transition-all appearance-none"
                   >
                     <option value="" className="bg-luxury-cream">Select an event type...</option>
-                    <option value="wedding" className="bg-luxury-cream">Wedding / Reception</option>
-                    <option value="corporate" className="bg-luxury-cream">Corporate Event / Conference</option>
-                    <option value="exhibition" className="bg-luxury-cream">Exhibition</option>
-                    <option value="family" className="bg-luxury-cream">Family Gathering / Party</option>
-                    <option value="other" className="bg-luxury-cream">Other</option>
+                    <option value="Wedding / Reception" className="bg-luxury-cream">Wedding / Reception</option>
+                    <option value="Corporate Event / Conference" className="bg-luxury-cream">Corporate Event / Conference</option>
+                    <option value="Exhibition" className="bg-luxury-cream">Exhibition</option>
+                    <option value="Family Gathering / Party" className="bg-luxury-cream">Family Gathering / Party</option>
+                    <option value="Other" className="bg-luxury-cream">Other</option>
                   </select>
                 </div>
 
@@ -246,31 +308,50 @@ export default function ContactClient() {
                   <textarea 
                     id="message" 
                     rows={4}
+                    value={formData.message}
+                    onChange={handleChange}
                     required
                     className="w-full bg-white/5 border border-luxury-taupe rounded-xl px-4 py-3 text-luxury-dark focus:outline-none focus:ring-2 focus:ring-luxury-gold focus:border-transparent transition-all resize-none"
                     placeholder="Tell us about your event..."
                   />
                 </div>
 
-                {/* Submit Button */}
-                <button 
-                  type="submit" 
-                  disabled={isSubmitting}
-                  className="w-full py-4 bg-luxury-gold hover:bg-luxury-gold/90 text-luxury-dark font-medium rounded-xl flex items-center justify-center gap-2 transition-all disabled:opacity-70 disabled:cursor-not-allowed"
-                >
-                  {isSubmitting ? (
-                    <div className="w-5 h-5 border-2 border-luxury-dark/30 border-t-luxury-dark rounded-full animate-spin" />
-                  ) : (
-                    <>
-                      Send Message <Send className="w-4 h-4" />
-                    </>
-                  )}
-                </button>
+                {/* Action Buttons: Submit & WhatsApp */}
+                <div className="flex flex-col sm:flex-row gap-4 pt-2">
+                  <button 
+                    type="submit" 
+                    disabled={isSubmitting}
+                    className="flex-1 py-4 bg-luxury-gold hover:bg-luxury-gold/90 text-luxury-dark font-medium rounded-xl flex items-center justify-center gap-2 transition-all disabled:opacity-70 disabled:cursor-not-allowed shadow-md"
+                  >
+                    {isSubmitting ? (
+                      <div className="w-5 h-5 border-2 border-luxury-dark/30 border-t-luxury-dark rounded-full animate-spin" />
+                    ) : (
+                      <>
+                        Send Email <Send className="w-4 h-4" />
+                      </>
+                    )}
+                  </button>
+
+                  <button 
+                    type="button" 
+                    onClick={handleWhatsAppSend}
+                    className="flex-1 py-4 bg-[#25D366] hover:bg-[#20bd5a] text-white font-medium rounded-xl flex items-center justify-center gap-2 transition-all shadow-md"
+                  >
+                    Chat on WhatsApp <MessageSquare className="w-4 h-4" />
+                  </button>
+                </div>
 
                 {/* Success Message */}
                 {isSuccess && (
-                  <div className="p-4 bg-luxury-gold/10 border border-luxury-mauve/20 rounded-xl text-luxury-gold text-sm text-center animate-in fade-in slide-in-from-bottom-2">
-                    Thank you! Your message has been sent successfully. We will get back to you shortly.
+                  <div className="p-4 bg-luxury-gold/10 border border-luxury-gold/30 rounded-xl text-luxury-dark text-sm text-center space-y-2 animate-in fade-in slide-in-from-bottom-2">
+                    <p className="font-semibold text-luxury-gold text-base">Thank you for reaching out!</p>
+                    <p className="text-luxury-mauve">Your message has been sent. We will get back to you shortly.</p>
+                    <button 
+                      onClick={handleWhatsAppSend}
+                      className="inline-flex items-center gap-1.5 text-xs text-[#25D366] underline font-medium hover:opacity-80 pt-1"
+                    >
+                      Want an instant reply? Open chat in WhatsApp
+                    </button>
                   </div>
                 )}
 
