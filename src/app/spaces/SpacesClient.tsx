@@ -154,7 +154,7 @@ export function SpacesClient() {
               </li>
               <li className="flex items-center gap-3 text-luxury-dark/90">
                 <div className="w-2 h-2 rounded-full bg-luxury-gold flex-shrink-0" />
-                <span className="font-medium text-lg">Advanced acoustic treatments</span>
+                <span className="font-medium text-lg">Acoustic treatments with RCF, Italy</span>
               </li>
               <li className="flex items-center gap-3 text-luxury-dark/90">
                 <div className="w-2 h-2 rounded-full bg-luxury-gold flex-shrink-0" />
