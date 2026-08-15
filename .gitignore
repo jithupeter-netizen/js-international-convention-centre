@@ -39,3 +39,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# large build artifacts & source files
+*.zip
+/out.zip
+work files/
+/work files/

@@ -10,17 +10,46 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-montserrat: var(--font-montserrat);
+  --color-luxury-dark: #3A2D28;
+  --color-luxury-mauve: #5C463D;
+  --color-luxury-gold: #CBAD8D;
+  --color-luxury-taupe: #D1C7BD;
+  --color-luxury-cream: #EBE3DB;
+  --color-luxury-light: #F1EDE6;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-luxury-light);
+  color: var(--color-luxury-dark);
+  font-family: var(--font-montserrat), Arial, Helvetica, sans-serif;
+}
+
+
+/* ========================================================
+   MARQUEE CAROUSEL
+   ======================================================== */
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.animate-marquee {
+  animation: marquee 40s linear infinite;
+}
+.pause-on-hover:hover .animate-marquee {
+  animation-play-state: paused;
+}
+
+/* ========================================================
+   ACCESSIBILITY: REDUCED MOTION
+   ======================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
