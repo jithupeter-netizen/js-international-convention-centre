@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { gsap, ScrollTrigger } from "@/lib/gsap";
-import { MapPin, Phone, Mail, Clock, Send, MessageSquare } from "lucide-react";
+import { MapPin, Phone, Mail, Clock, Send, MessageSquare, ShieldCheck, RefreshCw } from "lucide-react";
 
 export default function ContactClient() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -19,6 +19,38 @@ export default function ContactClient() {
     eventType: "",
     message: ""
   });
+
+  // Captcha & Anti-Bot Security State
+  const [captchaMath, setCaptchaMath] = useState({ num1: 4, num2: 3 });
+  const [captchaInput, setCaptchaInput] = useState("");
+  const [captchaError, setCaptchaError] = useState(false);
+  const [honeypot, setHoneypot] = useState("");
+
+  const generateCaptcha = () => {
+    const n1 = Math.floor(Math.random() * 8) + 2; // 2 to 9
+    const n2 = Math.floor(Math.random() * 8) + 1; // 1 to 9
+    setCaptchaMath({ num1: n1, num2: n2 });
+    setCaptchaInput("");
+    setCaptchaError(false);
+  };
+
+  useEffect(() => {
+    generateCaptcha();
+  }, []);
+
+  const validateCaptcha = () => {
+    // If honeypot is filled, silently reject bot
+    if (honeypot.trim() !== "") {
+      return false;
+    }
+    const expected = captchaMath.num1 + captchaMath.num2;
+    if (parseInt(captchaInput.trim(), 10) !== expected) {
+      setCaptchaError(true);
+      return false;
+    }
+    setCaptchaError(false);
+    return true;
+  };
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -64,6 +96,8 @@ export default function ContactClient() {
 
   const handleWhatsAppSend = (e?: React.MouseEvent) => {
     if (e) e.preventDefault();
+    if (!validateCaptcha()) return;
+    
     const text = `*New Event Inquiry - J's International Convention Centre*\n\n` +
       `*Name:* ${formData.name || 'Not provided'}\n` +
       `*Phone:* ${formData.phone || 'Not provided'}\n` +
@@ -80,6 +114,8 @@ export default function ContactClient() {
   // Form submit handler with Web3Forms & WhatsApp fallback
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!validateCaptcha()) return;
+    
     setIsSubmitting(true);
     
     try {
@@ -314,6 +350,53 @@ export default function ContactClient() {
                     className="w-full bg-white/5 border border-luxury-taupe rounded-xl px-4 py-3 text-luxury-dark focus:outline-none focus:ring-2 focus:ring-luxury-gold focus:border-transparent transition-all resize-none"
                     placeholder="Tell us about your event..."
                   />
+                </div>
+
+                {/* Honeypot Field (Hidden from humans, catches automated bots) */}
+                <input 
+                  type="text" 
+                  name="bot_check" 
+                  value={honeypot}
+                  onChange={(e) => setHoneypot(e.target.value)}
+                  tabIndex={-1}
+                  autoComplete="off"
+                  className="hidden"
+                  aria-hidden="true"
+                />
+
+                {/* Security Verification Captcha */}
+                <div className="bg-luxury-gold/5 border border-luxury-taupe/60 p-4 rounded-xl space-y-2">
+                  <div className="flex items-center justify-between">
+                    <label htmlFor="captcha" className="text-xs font-semibold text-luxury-dark uppercase tracking-wider flex items-center gap-2">
+                      <ShieldCheck className="w-4 h-4 text-luxury-gold" />
+                      Security Check: What is {captchaMath.num1} + {captchaMath.num2}?
+                    </label>
+                    <button 
+                      type="button" 
+                      onClick={generateCaptcha}
+                      className="text-luxury-mauve hover:text-luxury-gold text-xs flex items-center gap-1 transition-colors"
+                      title="New Math Problem"
+                    >
+                      <RefreshCw className="w-3.5 h-3.5" /> Refresh
+                    </button>
+                  </div>
+                  <input 
+                    type="number" 
+                    id="captcha" 
+                    value={captchaInput}
+                    onChange={(e) => {
+                      setCaptchaInput(e.target.value);
+                      if (captchaError) setCaptchaError(false);
+                    }}
+                    required
+                    className="w-full bg-white border border-luxury-taupe rounded-xl px-4 py-3 text-luxury-dark text-sm focus:outline-none focus:ring-2 focus:ring-luxury-gold focus:border-transparent transition-all"
+                    placeholder="Enter the correct sum..."
+                  />
+                  {captchaError && (
+                    <p className="text-red-500 text-xs font-medium mt-1">
+                      Incorrect security answer. Please solve the math problem to proceed.
+                    </p>
+                  )}
                 </div>
 
                 {/* Action Buttons: Submit & WhatsApp */}
