@@ -4,6 +4,9 @@ import AboutClient from "./AboutClient";
 export const metadata: Metadata = {
   title: "About Us | J's International Convention Centre",
   description: "Learn about the history, vision, and mission of J's International Convention Centre in Kollam. A destination where celebrations find their perfect setting.",
+  alternates: {
+    canonical: '/about/',
+  },
 };
 
 export default function AboutPage() {

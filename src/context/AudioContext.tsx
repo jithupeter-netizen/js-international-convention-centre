@@ -38,10 +38,6 @@ export const AudioProvider = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <AudioContext.Provider value={{ isPlaying, toggleAudio }}>
-      {/* Defer global audio element instantiation until Stage 4 (after Butterfly animation) */}
-      {(!isBot && stage4Audio) && (
-        <audio ref={audioRef} src="/audio/background.mp3" preload="none" loop />
-      )}
       {children}
     </AudioContext.Provider>
   );

@@ -30,7 +30,7 @@ export default function SpaceSection({ id, title, subtitle, description, feature
   const [viewMode, setViewMode] = useState<"slider" | "360">("slider");
   const [is360Loaded, setIs360Loaded] = useState(false);
   const { isFullyLoaded, isBot } = usePreloader();
-  const { ref: viewRef, isInView } = useInView("800px", false);
+  const { ref: viewRef, isInView } = useInView("300px", false);
   const sectionRef = useRef<HTMLDivElement>(null);
   const carouselRef = useRef<HTMLDivElement>(null);
   const viewerRef = useRef<Viewer | null>(null);

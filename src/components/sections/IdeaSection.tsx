@@ -16,7 +16,7 @@ const ReactPhotoSphereViewer = dynamic(
 
 export default function IdeaSection() {
   const { isFullyLoaded, isBot } = usePreloader();
-  const { ref: viewRef, isInView } = useInView("800px");
+  const { ref: viewRef, isInView } = useInView("300px");
   const sectionRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLHeadingElement>(null);
   const viewerRef = useRef<Viewer | null>(null);

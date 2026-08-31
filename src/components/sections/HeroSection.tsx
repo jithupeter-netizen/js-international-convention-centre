@@ -130,7 +130,7 @@ export default function HeroSection() {
     const rotateViewer = () => {
       if (viewerRef.current && !isTransitioning.current && bgWrapperRef.current) {
         const rect = bgWrapperRef.current.getBoundingClientRect();
-        if (rect.top < window.innerHeight && rect.bottom > 0) {
+        if (rect.bottom > 0 && rect.top < window.innerHeight) {
           try {
             const currentPos = viewerRef.current.getPosition();
             const targetCenter = PANORAMAS[currentPanoIndexRef.current].centerYaw;

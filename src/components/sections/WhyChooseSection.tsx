@@ -71,7 +71,7 @@ const FeatureViewer = ({ src, isActive }: { src: string, isActive: boolean }) =>
 
 export default function WhyChooseSection() {
   const { isFullyLoaded, isBot } = usePreloader();
-  const { ref: viewRef, isInView } = useInView("800px");
+  const { ref: viewRef, isInView } = useInView("300px");
   const sectionRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const [isMobile, setIsMobile] = useState(false);

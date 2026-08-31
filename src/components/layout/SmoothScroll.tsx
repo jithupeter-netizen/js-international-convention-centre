@@ -15,6 +15,15 @@ export default function SmoothScroll({ children }: { children: ReactNode }) {
     // Register ScrollTrigger
     gsap.registerPlugin(ScrollTrigger);
 
+    // Bypass Lenis on mobile/touch devices to save CPU and use native scrolling
+    const isMobile = window.matchMedia("(max-width: 768px)").matches || 
+                     window.matchMedia("(pointer: coarse)").matches;
+                     
+    if (isMobile) {
+      const timer = setTimeout(() => ScrollTrigger.refresh(), 1000);
+      return () => clearTimeout(timer);
+    }
+
     // Initialize Lenis for smooth scrolling
     const lenis = new Lenis({
       duration: 1.2,

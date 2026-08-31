@@ -19,8 +19,24 @@ export default function Butterfly() {
   const prefersReducedMotion = typeof window !== 'undefined' ? window.matchMedia('(prefers-reduced-motion: reduce)').matches : false;
   if (prefersReducedMotion) return null;
 
+  const [hasScrolled, setHasScrolled] = useState(false);
+
   useEffect(() => {
-    if (isBot || !isFullyLoaded || !stage3Butterfly) return;
+    const handleInitialScroll = () => {
+      if (window.scrollY > 100) {
+        setHasScrolled(true);
+        window.removeEventListener('scroll', handleInitialScroll);
+      }
+    };
+    
+    window.addEventListener('scroll', handleInitialScroll, { passive: true });
+    handleInitialScroll(); // check initially
+
+    return () => window.removeEventListener('scroll', handleInitialScroll);
+  }, []);
+
+  useEffect(() => {
+    if (isBot || !isFullyLoaded || !stage3Butterfly || !hasScrolled) return;
     if (!butterflyRef.current || !wingLeftRef.current || !wingRightRef.current) return;
 
     const butterfly = butterflyRef.current;
@@ -254,9 +270,9 @@ export default function Butterfly() {
       if (idleTimer) clearTimeout(idleTimer);
       if (animationFrameId) cancelAnimationFrame(animationFrameId);
     };
-  }, [isFullyLoaded, isBot, stage3Butterfly]);
+  }, [isFullyLoaded, isBot, stage3Butterfly, hasScrolled]);
 
-  if (isBot || !isFullyLoaded || !stage3Butterfly) return null;
+  if (isBot || !isFullyLoaded || !stage3Butterfly || !hasScrolled) return null;
 
   return (
     <div id="magic-butterfly" ref={butterflyRef}>

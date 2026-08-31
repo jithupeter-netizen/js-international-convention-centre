@@ -34,6 +34,17 @@ export const metadata: Metadata = {
   },
   title: "J's International Convention Centre | Kalluvathukkal, Kollam",
   description: "A destination where celebrations find their perfect setting. Blending contemporary architecture with the beauty of nature for weddings, conferences, and events.",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
   icons: {
     icon: "/pix/icon.svg",
   },
