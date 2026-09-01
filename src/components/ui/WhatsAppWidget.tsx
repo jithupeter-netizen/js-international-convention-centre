@@ -8,7 +8,7 @@ export default function WhatsAppWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState("");
 
-  const phoneNumber = "911234567890"; 
+  const phoneNumber = "919567765059";
 
   const handleSend = (e: React.FormEvent) => {
     e.preventDefault();
